@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using Newtonsoft.Json.Linq;
+using Skybrud.Essentials.Strings;
 using Skybrud.Essentials.Time;
 using Umbraco.Core.Models;
 using Umbraco.Web;
@@ -11,6 +12,26 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
     /// Static class with various extension methods for <see cref="IPublishedContent"/>.
     /// </summary>
     public static partial class PublishedContentExtensions {
+
+        /// <summary>
+        /// Returns whether the specified <paramref name="content"/> item should be hidden in navigation (if the
+        /// <code>umbracoNaviHide</code> property has been checked in Umbraco).
+        /// </summary>
+        /// <param name="content">An instance of <see cref="IPublishedContent"/> representing the item.</param>
+        public static bool IsHidden(this IPublishedContent content) {
+            return content.GetPropertyValue<bool>("umbracoNaviHide");
+        }
+
+        /// <summary>
+        /// Gets whether the specified <paramref name="content"/> item is a descendant of a node with the
+        /// <paramref name="contentId"/>.
+        /// </summary>
+        /// <param name="content">An instance of <see cref="IPublishedContent"/> representing the
+        /// item/descendant.</param>
+        /// <param name="contentId">The ID of the ancestor.</param>
+        public static bool IsDescendantOf(this IPublishedContent content, int contentId) {
+            return content.Path.Contains("," + contentId + ",");
+        }
 
         /// <summary>
         /// Gets a string value of the property with the specified <paramref name="propertyAlias"/>, or
@@ -30,7 +51,6 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
         public static HtmlString GetHtmlString(this IPublishedContent content, string propertyAlias) {
             return content == null ? null : content.GetPropertyValue<HtmlString>(propertyAlias);
         }
-
 
         public static string[] GetStringArray(this IPublishedContent content, string propertyAlias) {
             return GetStringArray(content, propertyAlias, new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -63,6 +83,30 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
 
         public static T GetInt64<T>(this IPublishedContent content, string propertyAlias, Func<long, T> func) {
             return content == null ? default(T) : func(content.GetPropertyValue<long>(propertyAlias));
+        }
+
+        public static float GetFloat(this IPublishedContent content, string propertyAlias) {
+            return content == null ? default(float) : content.GetPropertyValue<float>(propertyAlias);
+        }
+
+        public static T GetFloat<T>(this IPublishedContent content, string propertyAlias, Func<float, T> func) {
+            return content == null ? default(T) : func(content.GetPropertyValue<float>(propertyAlias));
+        }
+
+        public static double GetDouble(this IPublishedContent content, string propertyAlias) {
+            return content == null ? default(double) : content.GetPropertyValue<double>(propertyAlias);
+        }
+
+        public static T GetDouble<T>(this IPublishedContent content, string propertyAlias, Func<double, T> func) {
+            return content == null ? default(T) : func(content.GetPropertyValue<double>(propertyAlias));
+        }
+
+        public static bool GetBoolean(this IPublishedContent content, string propertyAlias) {
+            return content == null ? default(bool) : StringUtils.ParseBoolean(content.GetPropertyValue(propertyAlias) + "");
+        }
+
+        public static T GetBoolean<T>(this IPublishedContent content, string propertyAlias, Func<bool, T> func) {
+            return content == null ? default(T) : func(StringUtils.ParseBoolean(content.GetPropertyValue(propertyAlias) + ""));
         }
 
         public static DateTime GetDateTime(this IPublishedContent content, string propertyAlias) {

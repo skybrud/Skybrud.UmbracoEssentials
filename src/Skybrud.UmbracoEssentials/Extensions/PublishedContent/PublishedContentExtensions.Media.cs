@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Linq;
-using Skybrud.Essentials.Strings.Extensions;
+using Skybrud.UmbracoEssentials.Media;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 
@@ -17,13 +16,7 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
         /// <param name="recursive">A value indicating whether to recurse.</param>
         /// <returns>Instance of <see cref="IPublishedContent"/> if found, otherwise <code>NULL</code>.</returns>
         public static IPublishedContent TypedMedia(this IPublishedContent content, string propertyAlias, bool recursive = false) {
-            
-            // Get the first ID in a comma separated string
-            int mediaId = (content.GetPropertyValue<string>(propertyAlias, recursive) ?? "").CsvToInt().FirstOrDefault();
-
-            // Parse the value and attempt to find the media node in the cache
-            return mediaId > 0 && UmbracoContext.Current != null ? UmbracoContext.Current.MediaCache.GetById(mediaId) : null;
-        
+            return MediaUtils.TypedMedia(content.GetPropertyValue<string>(propertyAlias, recursive) ?? "");
         }
 
         /// <summary>
@@ -37,15 +30,7 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
         /// <param name="func">The delegate function to be used for the conversion.</param>
         /// <returns>Instance of <typeparamref name="T"/> if found, otherwise <code>NULL</code>.</returns>
         public static T TypedMedia<T>(this IPublishedContent content, string propertyAlias, Func<IPublishedContent, T> func) {
-            
-            if (func == null) throw new ArgumentNullException("func");
-            
-            // Find the media using the method overload
-            IPublishedContent media = TypedMedia(content, propertyAlias);
-
-            // Convert the media (or just return null if not found)
-            return media == null ? default(T) : func(media);
-        
+            return MediaUtils.TypedMedia(content.GetPropertyValue<string>(propertyAlias) ?? "", func);
         }
 
         /// <summary>
@@ -57,18 +42,7 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
         /// <param name="recursive">A value indicating whether to recurse.</param>
         /// <returns>Array of <see cref="IPublishedContent"/>.</returns>
         public static IPublishedContent[] TypedCsvMedia(this IPublishedContent content, string propertyAlias, bool recursive = false) {
-
-            // If the Umbraco context isn't avaiable, we just return an empty array
-            if (UmbracoContext.Current == null) return new IPublishedContent[0];
- 
-            // Look up each ID in the media cache and return the collection as an array
-            return (
-                from id in content.GetPropertyValue<string>(propertyAlias, recursive).CsvToInt()
-                let item = UmbracoContext.Current.MediaCache.GetById(id)
-                where item != null
-                select item
-            ).ToArray();
-        
+            return MediaUtils.TypedCsvMedia(content.GetPropertyValue<string>(propertyAlias, recursive) ?? "");
         }
 
         /// <summary>
@@ -81,20 +55,7 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
         /// <param name="func">The delegate function to be used for the conversion.</param>
         /// <returns>Array of <typeparamref name="T"/>.</returns>
         public static T[] TypedCsvMedia<T>(this IPublishedContent content, string propertyAlias, Func<IPublishedContent, T> func) {
-
-            if (func == null) throw new ArgumentNullException("func");
-
-            // If the Umbraco context isn't avaiable, we just return an empty array
-            if (UmbracoContext.Current == null) return new T[0];
-
-            // Look up each ID in the media cache and return the collection as an array
-            return (
-                from id in content.GetPropertyValue<string>(propertyAlias).CsvToInt()
-                let item = UmbracoContext.Current.MediaCache.GetById(id)
-                where item != null
-                select func(item)
-            ).ToArray();
-        
+            return MediaUtils.TypedCsvMedia(content.GetPropertyValue<string>(propertyAlias) ?? "", func);
         }
 
     }
