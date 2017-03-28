@@ -59,7 +59,7 @@ namespace Skybrud.UmbracoEssentials.Content {
             // Look up each ID in the content cache and return the collection as an array
             return (
                 from id in str.CsvToInt()
-                let item = UmbracoContext.Current.MediaCache.GetById(id)
+                let item = UmbracoContext.Current.ContentCache.GetById(id)
                 where item != null
                 select item
             ).ToArray();
@@ -84,7 +84,7 @@ namespace Skybrud.UmbracoEssentials.Content {
             // Look up each ID in the content cache and return the collection as an array
             return (
                 from id in str.CsvToInt()
-                let item = UmbracoContext.Current.MediaCache.GetById(id)
+                let item = UmbracoContext.Current.ContentCache.GetById(id)
                 where item != null
                 select func(item)
             ).ToArray();
