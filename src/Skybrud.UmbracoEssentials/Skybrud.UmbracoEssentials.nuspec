@@ -4,7 +4,7 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>Anders Bjerner</authors>
+    <authors>Anders Bjerner, Rene Pjengaard Bank</authors>
     <owners>Anders Bjerner</owners>
     <licenseUrl>https://github.com/skybrud/Skybrud.UmbracoEssentials/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/skybrud/Skybrud.UmbracoEssentials</projectUrl>
