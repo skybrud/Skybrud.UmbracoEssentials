@@ -2,3 +2,4 @@ src/packages/
 src/Skybrud.UmbracoEssentials/bin/
 src/Skybrud.UmbracoEssentials/obj/
 node_modules/
+src/.vs/
