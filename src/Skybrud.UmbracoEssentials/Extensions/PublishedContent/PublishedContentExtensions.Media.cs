@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Skybrud.UmbracoEssentials.Media;
+using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 
@@ -25,6 +26,9 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
 
             // Handle various value types
             switch (propertyValue) {
+
+                case int mediaId:
+                    return UmbracoContext.Current.MediaCache.GetById(mediaId);
 
                 case IPublishedContent pc:
                     return pc;
@@ -73,6 +77,9 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
 
             // Handle various value types
             switch (propertyValue) {
+
+                case int mediaId:
+                    return new []{ UmbracoContext.Current.MediaCache.GetById(mediaId) }.WhereNotNull().ToArray();
 
                 case IPublishedContent pc:
                     return new []{ pc };
