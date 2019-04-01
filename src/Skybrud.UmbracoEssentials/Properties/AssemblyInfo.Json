@@ -3,8 +3,8 @@
   "description": "Library with common purpose functionality for working with Umbraco.",
   "company": "Skybrud.dk",
   "product": "Skybrud.UmbracoEssentials",
-  "copyright": "Copyright © 2018",
-  "version": "1.0.3.0",
-  "informationalVersion": "1.0.3",
-  "fileVersion": "1.0.3.0"
+  "copyright": "Copyright © 2019",
+  "version": "1.0.4.0",
+  "informationalVersion": "1.0.4",
+  "fileVersion": "1.0.4.0"
 }
