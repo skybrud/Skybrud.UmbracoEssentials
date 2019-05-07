@@ -1,28 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Umbraco.Core.Models;
-using Umbraco.Web;
 using Skybrud.Essentials.Strings.Extensions;
+using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Web.Composing;
 
-namespace Skybrud.UmbracoEssentials.Extensions.Udi
-{
-	public static class UdiExtensions
-	{
-		/// <summary>
-		/// Find node in Umbraco and return the guid of the node
+namespace Skybrud.UmbracoEssentials.Extensions.Udi {
+
+    public static class UdiExtensions {
+		
+        /// <summary>
+		/// Find node in Umbraco and return the guid of the node.
 		/// </summary>
 		/// <param name="nodeId"></param>
 		/// <returns></returns>
-		public static Guid? GetGuid(this int nodeId)
-		{
-			IPublishedContent node = UmbracoContext.Current.ContentCache.GetById(nodeId);
-
-			if (node == null) return (Guid?)null;
-
-			return node.GetKey();
+		public static Guid? GetGuid(this int nodeId) {
+			IPublishedContent node = Current.UmbracoContext?.ContentCache.GetById(nodeId);
+            return node?.Key;
 		}
 
 		/// <summary>
@@ -30,34 +23,27 @@ namespace Skybrud.UmbracoEssentials.Extensions.Udi
 		/// </summary>
 		/// <param name="nodeId"></param>
 		/// <returns></returns>
-		public static string GetGuidStringExamine(this int nodeId)
-		{
+		public static string GetGuidStringExamine(this int nodeId) {
 			Guid? g = GetGuid(nodeId);
-
-			if (g == null) return string.Empty;
-
-			return g.ToString().Replace("-", "");
-		}
+			return g == null ? string.Empty : g.ToString().Replace("-", "");
+        }
 
 		/// <summary>
 		/// Find nodes in Umbraco and returns the guid-strings (w. - removed)
 		/// </summary>
 		/// <param name="nodeIds">int[]</param>
 		/// <returns></returns>
-		public static string GetGuidsStringExamine(this int[] nodeIds)
-		{
-			List<string> guids = new List<string>();
+		public static string GetGuidsStringExamine(this int[] nodeIds) {
 
-			foreach (int i in nodeIds)
-			{
+            List<string> guids = new List<string>();
+
+			foreach (int i in nodeIds) {
 				Guid? g = GetGuid(i);
-
 				if (g == null) continue;
-
 				guids.Add(g.ToString().Replace("-", ""));
 			}
 
-			return String.Join(" ", guids.ToArray());
+			return string.Join(" ", guids.ToArray());
 		}
 
 		/// <summary>
@@ -65,9 +51,10 @@ namespace Skybrud.UmbracoEssentials.Extensions.Udi
 		/// </summary>
 		/// <param name="nodeIds">string</param>
 		/// <returns></returns>
-		public static string GetGuidsStringExamine(this string nodeIds)
-		{
+		public static string GetGuidsStringExamine(this string nodeIds) {
 			return nodeIds.ToInt32Array().GetGuidsStringExamine();
 		}
-	}
+
+    }
+
 }

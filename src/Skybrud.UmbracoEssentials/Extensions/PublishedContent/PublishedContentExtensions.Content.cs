@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Skybrud.UmbracoEssentials.Content;
 using Umbraco.Core;
-using Umbraco.Core.Models;
+using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web;
+using Umbraco.Web.Composing;
 
 namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
     
@@ -16,19 +17,18 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
         /// </summary>
         /// <param name="content">An instance of <see cref="IPublishedContent"/>.</param>
         /// <param name="propertyAlias">The alias of the property containing the ID.</param>
-        /// <param name="recursive">A value indicating whether to recurse.</param>
-        /// <returns>Instance of <see cref="IPublishedContent"/> if found, otherwise <code>null</code>.</returns>
-        public static IPublishedContent TypedContent(this IPublishedContent content, string propertyAlias, bool recursive = false) {
+        /// <returns>Instance of <see cref="IPublishedContent"/> if found, otherwise <c>null</c>.</returns>
+        public static IPublishedContent TypedContent(this IPublishedContent content, string propertyAlias) {
             
             // Get the property value
-            object propertyValue = content?.GetPropertyValue(propertyAlias, recursive);
+            object propertyValue = content?.Value(propertyAlias);
             if (propertyValue == null) return null;
 
             // Handle various value types
             switch (propertyValue) {
 
                 case int contentId:
-                    return UmbracoContext.Current.ContentCache.GetById(contentId);
+                    return Current.UmbracoContext.ContentCache.GetById(contentId);
 
                 case IPublishedContent pc:
                     return pc;
@@ -67,19 +67,18 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
         /// </summary>
         /// <param name="content">An instance of <see cref="IPublishedContent"/>.</param>
         /// <param name="propertyAlias">The alias of the property containing the IDs.</param>
-        /// <param name="recursive">A value indicating whether to recurse.</param>
         /// <returns>Array of <see cref="IPublishedContent"/>.</returns>
-        public static IPublishedContent[] TypedCsvContent(this IPublishedContent content, string propertyAlias, bool recursive = false) {
+        public static IPublishedContent[] TypedCsvContent(this IPublishedContent content, string propertyAlias) {
 
             // Get the property value
-            object propertyValue = content?.GetPropertyValue(propertyAlias, recursive);
+            object propertyValue = content?.Value(propertyAlias);
             if (propertyValue == null) return null;
 
             // Handle various value types
             switch (propertyValue) {
 
                 case int contentId:
-                    return new[] { UmbracoContext.Current.ContentCache.GetById(contentId) }.WhereNotNull().ToArray();
+                    return new[] { Current.UmbracoContext.ContentCache.GetById(contentId) }.WhereNotNull().ToArray();
 
                 case IPublishedContent pc:
                     return new []{ pc };

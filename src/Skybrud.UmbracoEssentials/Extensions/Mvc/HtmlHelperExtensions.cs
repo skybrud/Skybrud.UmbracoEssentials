@@ -42,7 +42,7 @@ namespace Skybrud.UmbracoEssentials.Extensions.Mvc {
         /// <param name="url">The URL to be converted.</param>
         /// <returns>Returns the cachable URL.</returns>
         public static string GetCachableUrl(string url) {
-            if (String.IsNullOrWhiteSpace(url)) return "";
+            if (string.IsNullOrWhiteSpace(url)) return "";
             if (!url.StartsWith("/") || url.StartsWith("//")) return url;
             FileInfo file = new FileInfo(HttpContext.Current.Server.MapPath("~" + url));
             if (!file.Exists) return url;

@@ -3,8 +3,11 @@ using System.Web;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Strings;
 using Skybrud.Essentials.Time;
-using Umbraco.Core.Models;
+using Umbraco.Core;
+using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web;
+
+// ReSharper disable RedundantTypeSpecificationInDefaultExpression
 
 namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
 
@@ -19,7 +22,7 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
         /// </summary>
         /// <param name="content">An instance of <see cref="IPublishedContent"/> representing the item.</param>
         public static bool IsHidden(this IPublishedContent content) {
-            return content.GetPropertyValue<bool>("umbracoNaviHide");
+            return content.Value<bool>(Constants.Conventions.Content.NaviHide);
         }
 
         /// <summary>
@@ -41,15 +44,15 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
         /// <param name="propertyAlias">The alias of the property.</param>
         /// <returns>Returns the string value of the property, or <code>null</code> if the property could not be found.</returns>
         public static string GetString(this IPublishedContent content, string propertyAlias) {
-            return content == null ? null : content.GetPropertyValue<string>(propertyAlias);
+            return content?.Value<string>(propertyAlias);
         }
 
         public static T GetString<T>(this IPublishedContent content, string propertyAlias, Func<string, T> func) {
-            return content == null ? default(T) : func(content.GetPropertyValue<string>(propertyAlias));
+            return content == null ? default(T) : func(content.Value<string>(propertyAlias));
         }
 
         public static HtmlString GetHtmlString(this IPublishedContent content, string propertyAlias) {
-            return content == null ? null : content.GetPropertyValue<HtmlString>(propertyAlias);
+            return content?.Value<HtmlString>(propertyAlias);
         }
 
         public static string[] GetStringArray(this IPublishedContent content, string propertyAlias) {
@@ -66,75 +69,75 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
         }
 
         public static string[] GetStringArray(this IPublishedContent content, string propertyAlias, char[] separator, StringSplitOptions options) {
-            return content == null ? new string[0] : (content.GetPropertyValue<string>(propertyAlias) ?? "").Split(separator, options);
+            return content == null ? new string[0] : (content.Value<string>(propertyAlias) ?? "").Split(separator, options);
         }
 
         public static int GetInt32(this IPublishedContent content, string propertyAlias) {
-            return content == null ? default(int) : content.GetPropertyValue<int>(propertyAlias);
+            return content?.Value<int>(propertyAlias) ?? default(int);
         }
 
         public static T GetInt32<T>(this IPublishedContent content, string propertyAlias, Func<int, T> func) {
-            return content == null ? default(T) : func(content.GetPropertyValue<int>(propertyAlias));
+            return content == null ? default(T) : func(content.Value<int>(propertyAlias));
         }
 
         public static long GetInt64(this IPublishedContent content, string propertyAlias) {
-            return content == null ? default(long) : content.GetPropertyValue<long>(propertyAlias);
+            return content?.Value<long>(propertyAlias) ?? default(long);
         }
 
         public static T GetInt64<T>(this IPublishedContent content, string propertyAlias, Func<long, T> func) {
-            return content == null ? default(T) : func(content.GetPropertyValue<long>(propertyAlias));
+            return content == null ? default(T) : func(content.Value<long>(propertyAlias));
         }
 
         public static float GetFloat(this IPublishedContent content, string propertyAlias) {
-            return content == null ? default(float) : content.GetPropertyValue<float>(propertyAlias);
+            return content?.Value<float>(propertyAlias) ?? default(float);
         }
 
         public static T GetFloat<T>(this IPublishedContent content, string propertyAlias, Func<float, T> func) {
-            return content == null ? default(T) : func(content.GetPropertyValue<float>(propertyAlias));
+            return content == null ? default(T) : func(content.Value<float>(propertyAlias));
         }
 
         public static double GetDouble(this IPublishedContent content, string propertyAlias) {
-            return content == null ? default(double) : content.GetPropertyValue<double>(propertyAlias);
+            return content?.Value<double>(propertyAlias) ?? default(double);
         }
 
         public static T GetDouble<T>(this IPublishedContent content, string propertyAlias, Func<double, T> func) {
-            return content == null ? default(T) : func(content.GetPropertyValue<double>(propertyAlias));
+            return content == null ? default(T) : func(content.Value<double>(propertyAlias));
         }
 
         public static bool GetBoolean(this IPublishedContent content, string propertyAlias) {
-            return content == null ? default(bool) : StringUtils.ParseBoolean(content.GetPropertyValue(propertyAlias) + "");
+            return content != null && StringUtils.ParseBoolean(content.Value(propertyAlias) + string.Empty);
         }
 
         public static T GetBoolean<T>(this IPublishedContent content, string propertyAlias, Func<bool, T> func) {
-            return content == null ? default(T) : func(StringUtils.ParseBoolean(content.GetPropertyValue(propertyAlias) + ""));
+            return content == null ? default(T) : func(StringUtils.ParseBoolean(content.Value(propertyAlias) + string.Empty));
         }
 
         public static DateTime GetDateTime(this IPublishedContent content, string propertyAlias) {
-            return content == null || !content.HasValue(propertyAlias) ? default(DateTime) : content.GetPropertyValue<DateTime>(propertyAlias);
+            return content == null || !content.HasValue(propertyAlias) ? default(DateTime) : content.Value<DateTime>(propertyAlias);
         }
 
         public static DateTime GetDateTime(this IPublishedContent content, string propertyAlias, DateTime fallback) {
-            return content == null || !content.HasValue(propertyAlias) ? fallback : content.GetPropertyValue<DateTime>(propertyAlias);
+            return content == null || !content.HasValue(propertyAlias) ? fallback : content.Value<DateTime>(propertyAlias);
         }
 
         public static EssentialsDateTime GetEssentialsDateTime(this IPublishedContent content, string propertyAlias) {
-            return content == null || !content.HasValue(propertyAlias) ? null : new EssentialsDateTime(content.GetPropertyValue<DateTime>(propertyAlias));
+            return content == null || !content.HasValue(propertyAlias) ? null : new EssentialsDateTime(content.Value<DateTime>(propertyAlias));
         }
 
         public static JObject GetJObject(this IPublishedContent content, string propertyAlias) {
-            return content == null ? null : content.GetPropertyValue<JObject>(propertyAlias);
+            return content?.Value<JObject>(propertyAlias);
         }
 
         public static T GetJObject<T>(this IPublishedContent content, string propertyAlias, Func<JObject, T> function) {
-            return content == null ? default(T) : function(content.GetPropertyValue<JObject>(propertyAlias));
+            return content == null ? default(T) : function(content.Value<JObject>(propertyAlias));
         }
 
         public static JArray GetJArray(this IPublishedContent content, string propertyAlias) {
-            return content == null ? null : content.GetPropertyValue<JArray>(propertyAlias);
+            return content?.Value<JArray>(propertyAlias);
         }
 
         public static T GetJArray<T>(this IPublishedContent content, string propertyAlias, Func<JArray, T> function) {
-            return content == null ? default(T) : function(content.GetPropertyValue<JArray>(propertyAlias));
+            return content == null ? default(T) : function(content.Value<JArray>(propertyAlias));
         }
 
     }
