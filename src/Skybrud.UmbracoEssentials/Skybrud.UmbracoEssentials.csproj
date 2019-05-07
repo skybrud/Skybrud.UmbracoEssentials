@@ -11,7 +11,7 @@
     <Product>Skybrud.UmbracoEssentials</Product>
     <Authors>Anders Bjerner</Authors>
     <Copyright>Copyright © 2019</Copyright>
-    <Description>with common purpose functionality for working with Umbraco..</Description>
+    <Description>Library with common purpose functionality for working with Umbraco.</Description>
     <RepositoryUrl>https://github.com/skybrud/Skybrud.UmbracoEssentials</RepositoryUrl>
   </PropertyGroup>
 
