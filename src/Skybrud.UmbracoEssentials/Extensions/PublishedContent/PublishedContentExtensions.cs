@@ -137,6 +137,10 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
             return content == null ? default(T) : function(content.GetPropertyValue<JArray>(propertyAlias));
         }
 
+        private static IPublishedContent[] ToArray(IPublishedContent content) {
+            return content == null ? new IPublishedContent[0] : new [] {content};
+        }
+
     }
 
 }

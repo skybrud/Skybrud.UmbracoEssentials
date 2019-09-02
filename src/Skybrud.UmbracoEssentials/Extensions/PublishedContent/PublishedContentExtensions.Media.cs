@@ -39,6 +39,12 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
                 case string str:
                     return MediaUtils.TypedMedia(str);
 
+                case Umbraco.Core.Udi udi:
+                    return UmbracoContext.Current.MediaCache.GetById(udi);
+
+                case Umbraco.Core.Udi[] udiArray:
+                    return udiArray.Length == 0 ? null : UmbracoContext.Current.MediaCache.GetById(udiArray[0]);
+
                 default:
                     return null;
 
@@ -79,7 +85,7 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
             switch (propertyValue) {
 
                 case int mediaId:
-                    return new []{ UmbracoContext.Current.MediaCache.GetById(mediaId) }.WhereNotNull().ToArray();
+                    return ToArray(UmbracoContext.Current.MediaCache.GetById(mediaId));
 
                 case IPublishedContent pc:
                     return new []{ pc };
@@ -89,6 +95,15 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
 
                 case string str:
                     return MediaUtils.TypedCsvMedia(str);
+
+                case Umbraco.Core.Udi udi:
+                    return ToArray(UmbracoContext.Current.MediaCache.GetById(udi));
+
+                case Umbraco.Core.Udi[] udiArray:
+                    return udiArray
+                        .Select(x => UmbracoContext.Current.MediaCache.GetById(x))
+                        .WhereNotNull()
+                        .ToArray();
 
                 default:
                     return new IPublishedContent[0];

@@ -39,6 +39,12 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
                 case string str:
                     return ContentUtils.TypedContent(str);
 
+                case Umbraco.Core.Udi udi:
+                    return UmbracoContext.Current.MediaCache.GetById(udi);
+
+                case Umbraco.Core.Udi[] udiArray:
+                    return udiArray.Length == 0 ? null : UmbracoContext.Current.MediaCache.GetById(udiArray[0]);
+
                 default:
                     return null;
 
@@ -79,7 +85,7 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
             switch (propertyValue) {
 
                 case int contentId:
-                    return new[] { UmbracoContext.Current.ContentCache.GetById(contentId) }.WhereNotNull().ToArray();
+                    return ToArray(UmbracoContext.Current.ContentCache.GetById(contentId));
 
                 case IPublishedContent pc:
                     return new []{ pc };
@@ -89,6 +95,15 @@ namespace Skybrud.UmbracoEssentials.Extensions.PublishedContent {
 
                 case string str:
                     return ContentUtils.TypedCsvContent(str);
+
+                case Umbraco.Core.Udi udi:
+                    return ToArray(UmbracoContext.Current.ContentCache.GetById(udi));
+
+                case Umbraco.Core.Udi[] udiArray:
+                    return udiArray
+                        .Select(x => UmbracoContext.Current.ContentCache.GetById(x))
+                        .WhereNotNull()
+                        .ToArray();
 
                 default:
                     return new IPublishedContent[0];
