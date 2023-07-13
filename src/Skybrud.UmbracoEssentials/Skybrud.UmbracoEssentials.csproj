@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net472</TargetFrameworks>
@@ -24,7 +24,7 @@
   
   <ItemGroup>
     <PackageReference Include="Skybrud.Essentials" Version="1.1.12" />
-    <PackageReference Include="UmbracoCms.Core" Version="8.0.0" />
+    <PackageReference Include="UmbracoCms.Core" Version="8.5.4" />
     <PackageReference Include="UmbracoCms.Web" Version="8.0.0" />
   </ItemGroup>
 
